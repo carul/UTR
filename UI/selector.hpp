@@ -19,6 +19,7 @@ typedef struct selectors_data{
     sf::RenderWindow *parentwindow;
     sf::Text buttontext;
     std::string group;
+    bool clicked = false;
 };
 
 class selector{
@@ -28,5 +29,7 @@ class selector{
     void removeall();
     int getid(std::string name);
     void drawallinparentwindow(sf::RenderWindow &parentwindow);
+    std::string procclick(int x, int y);
+    std::vector<int>getselectedids();
 };
 #endif // SELECTOR_H

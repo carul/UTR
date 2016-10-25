@@ -7,5 +7,6 @@
 #include "UI/selector.hpp"
 bool prerunoptions();
 void drawalluielements(sf::RenderWindow &window, selector *selectors);
+void UIactifclicked(sf::RenderWindow &window, sf::Event event, selector *selectors);
 #endif // INITIALISERS_H
 

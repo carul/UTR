@@ -51,3 +51,41 @@ void selector::drawallinparentwindow(sf::RenderWindow &parentwindow){
         }
     }
 }
+
+std::string selector::procclick(int x, int y){
+    for(int i=0; i < selectors.size(); i++){
+        if (selectors[i].square.getPosition().x <= x && selectors[i].square.getPosition().y <= y
+            && selectors[i].square.getPosition().x + selectors[i].square.getSize().x >= x
+            && selectors[i].square.getPosition().y + selectors[i].square.getSize().y >= y){
+                if(selectors[i].clicked){
+                    selectors[i].square.setFillColor(sf::Color(0,0,255));
+                    selectors[i].clicked = false;
+                }
+                else{
+                    selectors[i].square.setFillColor(sf::Color(0,255,0));
+                    selectors[i].clicked = true;
+                }
+                std::string tempgroup = selectors[i].group;
+                if(tempgroup != ""){
+                    for(int j = 0; j < selectors.size(); j++){
+                        if (selectors[j].group == tempgroup && i != j){
+                            selectors[j].clicked = false;
+                            selectors[j].square.setFillColor(sf::Color(0,0,255));
+                        }
+                    }
+                }
+            }
+    }
+}
+
+std::vector<int> selector::getselectedids(){
+    std::vector<int> temp;
+    for(int i= 0; i < selectors.size(); i++){
+        if(selectors[i].clicked == true){
+            temp.push_back(selectors[i].id);
+            std::cout << selectors[i].id <<std::endl;
+        }
+    }
+    std::cout << std::endl << std::endl;
+    return temp;
+}

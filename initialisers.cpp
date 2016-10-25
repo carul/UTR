@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include "initialisers.hpp"
@@ -20,7 +21,19 @@ bool prerunoptions(){
     presetupselectors->createnew(150, 50, "res9", 450, 250, setup, {0, 0, 255}, false, "1280x800", "selectres");
     presetupselectors->createnew(400, 50, "res9", 0, 350, setup, {0, 0, 255}, true, "Enable fullscreen?", "");
     sf::Event event;
+    std::vector <int> clicked;
     while(setup->isOpen()){
+        while(setup->pollEvent(event)){
+            switch(event.type){
+            case sf::Event::Closed:
+                setup->close();
+                break;
+            case sf::Event::MouseButtonPressed:
+                UIactifclicked(*setup, event, presetupselectors);
+                break;
+            }
+            clicked =presetupselectors->getselectedids();
+        }
         setup->clear();
         drawalluielements(*setup, presetupselectors);
         setup->display();
@@ -31,4 +44,8 @@ bool prerunoptions(){
 
 void drawalluielements(sf::RenderWindow &window, selector *selectors){
     selectors->drawallinparentwindow(window);
+}
+
+void UIactifclicked(sf::RenderWindow &window, sf::Event event, selector *selectors){
+    selectors->procclick(event.mouseButton.x, event.mouseButton.y);
 }
