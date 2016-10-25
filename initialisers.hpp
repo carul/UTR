@@ -6,6 +6,6 @@
 #include "initialisers.hpp"
 #include "UI/selector.hpp"
 bool prerunoptions();
-void drawalluielements(sf::RenderWindow &window);
+void drawalluielements(sf::RenderWindow &window, selector *selectors);
 #endif // INITIALISERS_H
 

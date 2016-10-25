@@ -3,15 +3,31 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <iostream>
 #include <SFML/System.hpp>
 
-bool selector::createnew(int width, int height, std::string name, int posx, int posy, sf::RenderWindow * parentwindow, color rgb){
-    selectors.push_back({sf::RectangleShape(), selectors.size(), name, parentwindow});
+bool selector::createnew(int width, int height, std::string name, int posx, int posy, sf::RenderWindow * parentwindow, color rgb, bool center, std::string text, std::string group){
+    sf::Text temp;
+    temp.setFont(mainfont);
+    temp.setString(text);
+    temp.setCharacterSize(parentwindow->getSize().y/21);
+    temp.setStyle(sf::Text::Bold);
+    temp.setColor(sf::Color(255,255,255));
+    float wdh = temp.getLocalBounds().width;
+    float hgh = temp.getLocalBounds().height;
+    if(!center)
+        temp.setPosition(sf::Vector2f(posx+width/2-wdh/2,posy+height/2-hgh/2));
+    else
+        temp.setPosition(sf::Vector2f(parentwindow->getSize().x/2 - temp.getLocalBounds().width/2, posy+height/2-hgh/2));
+    selectors.push_back({sf::RectangleShape(), selectors.size(), name, parentwindow, temp, group});
     int a = selectors.size();
     a--;
     selectors[a].square.setSize(sf::Vector2f(width, height));
     selectors[a].square.setPosition(sf::Vector2f(posx, posy));
     selectors[a].square.setFillColor(sf::Color(rgb.r, rgb.g, rgb.b));
+    if(center){
+            selectors[a].square.setPosition(sf::Vector2f(parentwindow->getSize().x/2-width/2, posy));
+    }
     return true;
 }
 
@@ -29,7 +45,9 @@ int selector::getid(std::string name){
 
 void selector::drawallinparentwindow(sf::RenderWindow &parentwindow){
     for(int i=0; i < selectors.size(); i++){
-        if(selectors[i].parentwindow = &parentwindow)
+        if(selectors[i].parentwindow = &parentwindow){
             parentwindow.draw(selectors[i].square);
+            parentwindow.draw(selectors[i].buttontext);
+        }
     }
 }
