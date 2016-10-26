@@ -27,9 +27,11 @@ class selector{
     public:
     bool createnew(int width, int height, std::string name, int posx, int posy, sf::RenderWindow *parentwindow, color rgb = {255,0,255}, bool center = false, std::string text = "", std::string group="");
     void removeall();
-    int getid(std::string name);
+    std::string getname(int id);
     void drawallinparentwindow(sf::RenderWindow &parentwindow);
-    std::string procclick(int x, int y);
-    std::vector<int>getselectedids();
+    void procclick(int x, int y, bool oneclick = false);
+    std::vector<int> getselectedids();
+    int getsizeofvector(std::vector<selectors_data> selectors);
+    void setinactive(int id);
 };
 #endif // SELECTOR_H

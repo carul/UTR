@@ -18,7 +18,7 @@ bool selector::createnew(int width, int height, std::string name, int posx, int 
     if(!center)
         temp.setPosition(sf::Vector2f(posx+width/2-wdh/2,posy+height/2-hgh/2));
     else
-        temp.setPosition(sf::Vector2f(parentwindow->getSize().x/2 - temp.getLocalBounds().width/2, posy+height/2-hgh/2));
+        temp.setPosition(sf::Vector2f(parentwindow->getSize().x/2 - temp.getLocalBounds().width/2, posy+height/2-hgh/2-10));
     selectors.push_back({sf::RectangleShape(), selectors.size(), name, parentwindow, temp, group});
     int a = selectors.size();
     a--;
@@ -35,12 +35,10 @@ void selector::removeall(){
     selectors.clear();
 }
 
-int selector::getid(std::string name){
-    for(int i = 0; i < selectors.size(); i++){
-        if(selectors[i].name == name){
-            return selectors[i].id;
-        }
-    }
+std::string selector::getname(int id){
+    for (int i = 0; i < selectors.size(); i ++)
+        if(selectors[i].id == id)
+            return selectors[i].name;
 }
 
 void selector::drawallinparentwindow(sf::RenderWindow &parentwindow){
@@ -52,40 +50,46 @@ void selector::drawallinparentwindow(sf::RenderWindow &parentwindow){
     }
 }
 
-std::string selector::procclick(int x, int y){
+void selector::procclick(int x, int y, bool oneclick){
     for(int i=0; i < selectors.size(); i++){
         if (selectors[i].square.getPosition().x <= x && selectors[i].square.getPosition().y <= y
             && selectors[i].square.getPosition().x + selectors[i].square.getSize().x >= x
             && selectors[i].square.getPosition().y + selectors[i].square.getSize().y >= y){
-                if(selectors[i].clicked){
-                    selectors[i].square.setFillColor(sf::Color(0,0,255));
-                    selectors[i].clicked = false;
-                }
-                else{
-                    selectors[i].square.setFillColor(sf::Color(0,255,0));
-                    selectors[i].clicked = true;
-                }
-                std::string tempgroup = selectors[i].group;
-                if(tempgroup != ""){
-                    for(int j = 0; j < selectors.size(); j++){
-                        if (selectors[j].group == tempgroup && i != j){
-                            selectors[j].clicked = false;
-                            selectors[j].square.setFillColor(sf::Color(0,0,255));
-                        }
+                if(selectors[i].name!="Start" || !getselectedids().empty()){
+                    if(!oneclick){
+                            if(selectors[i].clicked){
+                                selectors[i].square.setFillColor(sf::Color(0,0,255));
+                                selectors[i].clicked = false;
+                            }
+                            else{
+                                selectors[i].square.setFillColor(sf::Color(0,255,0));
+                                selectors[i].clicked = true;
+                            }
+                            std::string tempgroup = selectors[i].group;
+                            if(tempgroup != ""){
+                                for(int j = 0; j < selectors.size(); j++){
+                                    if (selectors[j].group == tempgroup && i != j){
+                                        selectors[j].clicked = false;
+                                        selectors[j].square.setFillColor(sf::Color(0,0,255));
+                                    }
+                                }
+                            }
+                    }
+                    else{
+                        selectors[i].clicked = true;
                     }
                 }
             }
     }
 }
 
+void selector::setinactive(int id){
+    selectors[id].clicked = false;
+}
 std::vector<int> selector::getselectedids(){
-    std::vector<int> temp;
-    for(int i= 0; i < selectors.size(); i++){
-        if(selectors[i].clicked == true){
+    std::vector <int> temp;
+    for(int i = 0; i < selectors.size(); i++)
+        if(selectors[i].clicked == true)
             temp.push_back(selectors[i].id);
-            std::cout << selectors[i].id <<std::endl;
-        }
-    }
-    std::cout << std::endl << std::endl;
     return temp;
 }
