@@ -1,11 +1,11 @@
+#include "initialisers.hpp"
+#include "GAMESCENE/dottedlines.hpp"
+#include "UI/selector.hpp"
 #include <SFML/Graphics.hpp>
 #include <string>
-#include <iostream>
 #include <vector>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
-#include "initialisers.hpp"
-#include "UI/selector.hpp"
 
 bool prerunoptions(short &resx, short &resy){
     sf::RenderWindow *setup = new sf::RenderWindow(sf::VideoMode(650, 600), "Ultra Typrovith Runaway Setup");
@@ -106,3 +106,14 @@ void UIactifclicked(sf::RenderWindow &window, sf::Event event, selector *selecto
     selectors->procclick(event.mouseButton.x, event.mouseButton.y, oneclick);
 }
 
+void initdrawableelements(lines &lines, sf::RenderWindow &window){
+    lines.initialise(window);
+}
+
+void drawgameelements(sf::RenderWindow &window, lines lines){
+    lines.drawintargetwindow(window);
+}
+
+void movegameelements(lines &lines){
+    lines.move();
+}

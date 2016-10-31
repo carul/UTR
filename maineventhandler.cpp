@@ -7,7 +7,7 @@
 #include "initialisers.hpp"
 #include "UI/selector.hpp"
 
-void handlemenuevents(sf::RenderWindow &window, selector &selector){
+int handlemenuevents(sf::RenderWindow &window, selector &selector){
     sf::Event event;
     while(window.pollEvent(event)){
         switch(event.type){
@@ -22,9 +22,11 @@ void handlemenuevents(sf::RenderWindow &window, selector &selector){
     std::vector<int>clicked = selector.getselectedids();
     std::string temp;
     for(int i = 0; i < clicked.size(); i++){
-
         temp = selector.getname(clicked[i]);
         if(temp == "EXIT")
             window.close();
+        if(temp == "START")
+            return 1;
     }
+    return 0;
 }

@@ -7,5 +7,5 @@
 #include <SFML/System.hpp>
 #include "initialisers.hpp"
 #include "UI/selector.hpp"
-void handlemenuevents(sf::RenderWindow &window, selector &selector);
+int handlemenuevents(sf::RenderWindow &window, selector &selector);
 #endif // MAINEVENTHANDLER_H
