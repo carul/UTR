@@ -1,13 +1,17 @@
 #include "initialisers.hpp"
 #include "GAMESCENE/dottedlines.hpp"
+#include "GAMESCENE/player.hpp"
 #include "UI/selector.hpp"
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
+#include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
-bool prerunoptions(short &resx, short &resy){
+extern player player;
+
+int prerunoptions(short &resx, short &resy){
     sf::RenderWindow *setup = new sf::RenderWindow(sf::VideoMode(650, 600), "Ultra Typrovith Runaway Setup");
     selector *presetupselectors = new selector;
     presetupselectors->createnew(200, 100, "Start", 0, 450, setup, {0, 0, 255}, true, "START");
@@ -21,6 +25,7 @@ bool prerunoptions(short &resx, short &resy){
     presetupselectors->createnew(150, 50, "res8", 250, 250, setup, {0, 0, 255}, false, "1600x900", "selectres");
     presetupselectors->createnew(150, 50, "res9", 450, 250, setup, {0, 0, 255}, false, "1280x900", "selectres");
     presetupselectors->createnew(400, 50, "flscr", 0, 350, setup, {0, 0, 255}, true, "Enable fullscreen?", "");
+    presetupselectors->createnew(100, 50, "sound", 50, 450, setup, {0, 0, 255}, false, "Sound", "");
     sf::Event event;
     std::vector <int> clicked;
     while(setup->isOpen()){
@@ -38,14 +43,23 @@ bool prerunoptions(short &resx, short &resy){
         setup->clear();
         drawalluielements(*setup, presetupselectors);
         setup->display();
+        int tempa = 0;
         for(int i = 0; i < clicked.size(); i++){
-            if (clicked[i] == 0){
+            if (clicked[i] == 11 || clicked[i]== 10){
+                tempa++;
+            }
+        }
+        for(int i = 0; i < clicked.size(); i++){
+            if (clicked[i] == 0 && clicked.size() > tempa+1){
                 setup->close();
                 break;
             }
+            else if(clicked[i]==0){
+                presetupselectors->unclick(0);
+            }
         }
     }
-    bool iffull = false;
+    int iffull = false;
     for(int i = 0; i < clicked.size(); i++){
         if(clicked[i] != 10 && clicked[i] != 0)
             switch(clicked[i]){
@@ -88,6 +102,8 @@ bool prerunoptions(short &resx, short &resy){
         else if(clicked[i] == 10)
             iffull = true;
     }
+    if(clicked[clicked.size()-1] == 11)
+        iffull+=2;
     delete presetupselectors;
     delete setup;
     return iffull;
@@ -110,8 +126,9 @@ void initdrawableelements(lines &lines, sf::RenderWindow &window){
     lines.initialise(window);
 }
 
-void drawgameelements(sf::RenderWindow &window, lines lines){
+void drawgameelements(sf::RenderWindow &window, lines lines, sf::RectangleShape shape){
     lines.drawintargetwindow(window);
+    window.draw(shape);
 }
 
 void movegameelements(lines &lines){

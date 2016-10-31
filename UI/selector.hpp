@@ -33,5 +33,6 @@ class selector{
     std::vector<int> getselectedids();
     int getsizeofvector(std::vector<selectors_data> selectors);
     void setinactive(int id);
+    void unclick(int id);
 };
 #endif // SELECTOR_H

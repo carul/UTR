@@ -83,6 +83,11 @@ void selector::procclick(int x, int y, bool oneclick){
     }
 }
 
+void selector::unclick(int id){
+    selectors[id].clicked = false;
+    selectors[id].square.setFillColor(sf::Color(0,0,255));
+}
+
 void selector::setinactive(int id){
     selectors[id].clicked = false;
 }
