@@ -1,4 +1,7 @@
 #include "GAMESCENE/dottedlines.hpp"
+#include "GAMESCENE/spritetools.hpp"
+#include "GAMESCENE/OBJECTS/policemans.hpp"
+#include "GAMESCENE/OBJECTS/surroundings.hpp"
 #include "GAMESCENE/player.hpp"
 #include "initialisers.hpp"
 #include "maineventhandler.hpp"
@@ -54,13 +57,16 @@ int main(){
 
     sf::Event event;
 
-    player.shape.setFillColor(sf::Color(255,0,255));
-    player.shape.setSize(sf::Vector2f(resx/10, resy/10));
     player.posx = 2;
     player.posy = resy/2-player.shape.getLocalBounds().height/2;
     player.shape.setPosition(mainwindow.getSize().x/2-player.shape.getLocalBounds().width/2, player.posy);
-
-
+    initplayertxt(player, mainwindow.getSize());
+    policeman man1, man2, man3;
+    initpolicemans(man1, 1, mainwindow.getSize());
+    initpolicemans(man2, 2, mainwindow.getSize());
+    initpolicemans(man3, 3, mainwindow.getSize());
+    surrounding surroundings;
+    surroundings.init(mainwindow.getSize());
     while(mainwindow.isOpen()){
         if(!gamestarted){
             switch(handlemenuevents(mainwindow, mainwindowselectors)){
@@ -107,18 +113,15 @@ int main(){
                      break;
                 }
             }
-            if(player.ismoving){
-                moveplayer(player, mainwindow.getSize().x*0.2);
-                player.shape.setPosition(player.shape.getPosition().x, player.posy);
-            }
-            else
-                player.shape.setPosition(player.posx*mainwindow.getSize().x*0.2+player.shape.getLocalBounds().width/2, player.posy);
-            if(player.ismovingvert)
-                moveplayervert(player);
+            managemovement(player, mainwindow.getSize());
+            if(player.posy > mainwindow.getSize().y - 10)
+                player.posy = mainwindow.getSize().y - 10;
             speed = log(mainclock.getElapsedTime().asMilliseconds());
-            speed+= 100;
+            speed += 100;
             mainwindow.clear(sf::Color(0,0,0));
             drawgameelements(mainwindow, line, player.shape);
+            drawpolice(mainwindow, man1, man2, man3);
+            surroundings.drawinwindow(mainwindow);
             mainwindow.display();
         }
     };

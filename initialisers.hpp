@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 #include <SFML/System.hpp>
-void drawgameelements(sf::RenderWindow &window, lines lines, sf::RectangleShape player);
+void drawgameelements(sf::RenderWindow &window, lines lines, sf::Sprite player);
 int prerunoptions(short &resx, short &resy);
 bool initmenubuttons(sf::RenderWindow &window, selector &selector);
 void drawalluielements(sf::RenderWindow &window, selector *selectors);

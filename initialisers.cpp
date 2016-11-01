@@ -126,7 +126,7 @@ void initdrawableelements(lines &lines, sf::RenderWindow &window){
     lines.initialise(window);
 }
 
-void drawgameelements(sf::RenderWindow &window, lines lines, sf::RectangleShape shape){
+void drawgameelements(sf::RenderWindow &window, lines lines, sf::Sprite shape){
     lines.drawintargetwindow(window);
     window.draw(shape);
 }
