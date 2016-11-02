@@ -128,7 +128,7 @@ void initdrawableelements(lines &lines, sf::RenderWindow &window){
 
 void drawgameelements(sf::RenderWindow &window, lines lines, sf::Sprite shape){
     lines.drawintargetwindow(window);
-    window.draw(shape);
+    //window.draw(shape);
 }
 
 void movegameelements(lines &lines){

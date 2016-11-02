@@ -2,6 +2,7 @@
 #include "GAMESCENE/spritetools.hpp"
 #include "GAMESCENE/OBJECTS/policemans.hpp"
 #include "GAMESCENE/OBJECTS/surroundings.hpp"
+#include "GAMESCENE/OBJECTS/obstacles.hpp"
 #include "GAMESCENE/player.hpp"
 #include "initialisers.hpp"
 #include "maineventhandler.hpp"
@@ -67,11 +68,24 @@ int main(){
     initpolicemans(man3, 3, mainwindow.getSize());
     surrounding surroundings;
     surroundings.init(mainwindow.getSize());
+    obstacles obstacles(mainwindow.getSize());
+    sf::Texture def;
+    sf::RectangleShape defs, defs2;
+    def.loadFromFile("IMG/defaulttxt.png");
+    defs.setTexture(&def);
+    defs2.setTexture(&def);
+    defs.setSize(sf::Vector2f(mainwindow.getSize().x*0.2 ,mainwindow.getSize().y));
+    defs2.setSize(sf::Vector2f(mainwindow.getSize().x*0.2 ,mainwindow.getSize().y));
+    defs.setOrigin(mainwindow.getSize().x*0.2 ,mainwindow.getSize().y);
+    defs.rotate(180);
+    defs.setPosition(0,0);
+    defs2.setPosition(mainwindow.getSize().x-defs2.getSize().x, 0);
     while(mainwindow.isOpen()){
         if(!gamestarted){
             switch(handlemenuevents(mainwindow, mainwindowselectors)){
             case 1:
                 gamestarted = true;
+                obstacles.clock.restart();
                 break;
             }
             mainwindow.clear();
@@ -80,6 +94,8 @@ int main(){
             mainwindow.display();
         }
         else{
+            obstacles.init();
+            obstacles.moveall();
             movegameelements(line);
             while(mainwindow.pollEvent(event)){
                 switch(event.type){
@@ -105,6 +121,10 @@ int main(){
                     }
                     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
                         mainwindow.close();
+                    if(player.isinair == false && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+                        player.isinair = true;
+                        player.jumpc.restart();
+                    }
                     break;
 
                 case sf::Event::KeyReleased:
@@ -114,14 +134,20 @@ int main(){
                 }
             }
             managemovement(player, mainwindow.getSize());
-            if(player.posy > mainwindow.getSize().y - 10)
-                player.posy = mainwindow.getSize().y - 10;
+            if(player.posy > mainwindow.getSize().y - man2.shape.getGlobalBounds().height*1.2)
+                player.posy = mainwindow.getSize().y - man2.shape.getGlobalBounds().height*1.2;
             speed = log(mainclock.getElapsedTime().asMilliseconds());
             speed += 100;
             mainwindow.clear(sf::Color(0,0,0));
             drawgameelements(mainwindow, line, player.shape);
+            obstacles.drawall(mainwindow);
+            mainwindow.draw(defs);
+            mainwindow.draw(defs2);
+            mainwindow.draw(player.shape);
             drawpolice(mainwindow, man1, man2, man3);
             surroundings.drawinwindow(mainwindow);
+            if(obstacles.collide(player))
+                mainwindow.close();
             mainwindow.display();
         }
     };

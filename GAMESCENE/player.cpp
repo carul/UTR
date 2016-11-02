@@ -56,6 +56,7 @@ void initplayertxt(player &player, sf::Vector2u size){
 }
 
 void managemovement(player &player, sf::Vector2u size){
+    jump(player);
     if(player.ismoving){
         moveplayer(player, size.x*0.2);
         player.shape.setPosition(player.shape.getPosition().x, player.posy);
@@ -67,5 +68,33 @@ void managemovement(player &player, sf::Vector2u size){
     if(player.animationp.getElapsedTime().asMilliseconds() > 100){
         animatetexture(player.texture, player.shape, player.activetxt);
         player.animationp.restart();
+    }
+}
+
+void jump(player &player){
+    sf::Time t= player.jumpc.getElapsedTime();
+    int temp = t.asMilliseconds()/2;
+    if(player.isinair == false){
+        player.orgscalex = player.shape.getScale().x;
+        player.orgscaley = player.shape.getScale().y;
+    }
+    else{
+        if(temp > 200 && temp < 600){
+            player.isjumping = true;
+        }
+        else
+            player.isjumping = false;
+        if(temp < 400){
+            if( temp > 200)
+                player.shape.setScale(temp*player.orgscalex*0.006, temp*player.orgscaley*0.006);
+        }
+        else if(temp < 600){
+            if(800-temp > 200)
+                player.shape.setScale((800-temp)*player.orgscalex*0.006, (800-temp)*player.orgscaley*0.006);
+        }
+        else{
+            player.shape.setScale(player.orgscalex, player.orgscaley);
+            player.isinair = false;
+        }
     }
 }
