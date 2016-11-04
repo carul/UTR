@@ -1,6 +1,7 @@
 #ifndef OBSTACLES_H
 #define OBSTACLES_H
 #include "../player.hpp"
+#include "../spritetools.hpp"
 #include <vector>
 #include <SFML/Graphics.hpp>
 extern int speed;

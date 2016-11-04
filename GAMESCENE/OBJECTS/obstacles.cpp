@@ -8,19 +8,23 @@ int obstacles::sizeinit(){
 }
 void obstacles::init(){
     if(firstinit){
+        smalltxt = findtextures("OBSTACLES/SMALL");
+        bigtxt = findtextures("OBSTACLES/WIDE");
         obs.resize(10);
         for(int i = 0; i < obs.size(); i++){
             int temp = rand() % 2;
             if(temp){
                 obs[i].shape.setSize(sf::Vector2f(winsizx*0.36, winsizy*0.1));
                 obs[i].shape.setPosition(((rand()%2)+1)*winsizx*0.2+winsizx*0.2-obs[i].shape.getSize().x/2,0);
-                obs[i].shape.setFillColor({255,0,255});
+                if(bigtxt.size())
+                    obs[i].shape.setTexture(&bigtxt[rand()%(bigtxt.size())],true);
                 obs[i].type= WIDE;
             }
             else{
                 obs[i].shape.setSize(sf::Vector2f(winsizx*0.18, winsizy*0.13));
                 obs[i].shape.setPosition(((rand()%3)+1)*winsizx*0.2+winsizx*0.1-obs[i].shape.getSize().x/2,0);
-                obs[i].shape.setFillColor({255,0,255});
+                if(smalltxt.size())
+                    obs[i].shape.setTexture(&smalltxt[rand()%(smalltxt.size())],true);
                 obs[i].type= SMALL;
             }
             obs[i].shape.setPosition(obs[i].shape.getPosition().x, -i*2*winsizy*0.15);
@@ -43,15 +47,15 @@ void obstacles::moveall(){
                 if(temp){
                     obs[i].shape.setSize(sf::Vector2f(winsizx*0.36, winsizy*0.1));
                     obs[i].shape.setPosition(((rand()%2)+1)*winsizx*0.2+winsizx*0.2-obs[i].shape.getSize().x/2,0);
-                    obs[i].shape.setFillColor({rand()%255,
-                                              rand()%255,rand()%255});
+                if(bigtxt.size())
+                    obs[i].shape.setTexture(&bigtxt[rand()%(bigtxt.size()-1)],true);
                     obs[i].type= WIDE;
                 }
                 else{
                     obs[i].shape.setSize(sf::Vector2f(winsizx*0.18, winsizy*0.13));
                     obs[i].shape.setPosition(((rand()%3)+1)*winsizx*0.2+winsizx*0.1-obs[i].shape.getSize().x/2,0);
-                    obs[i].shape.setFillColor({rand()%255,
-                                              rand()%255,rand()%255});
+                    if(smalltxt.size())
+                        obs[i].shape.setTexture(&smalltxt[rand()%(smalltxt.size()-1)],true);
                     obs[i].type= SMALL;
                 }
                 obs[i].shape.setPosition(obs[i].shape.getPosition().x, -9*2*winsizy*0.15+winsizy);
@@ -69,7 +73,7 @@ bool obstacles::collide(player player){
     if(!player.isjumping){
         sf::Rect<int> play(player.shape.getPosition().x, player.shape.getPosition().y, player.shape.getGlobalBounds().width, player.shape.getGlobalBounds().height);
         for(int i = 0; i < obs.size(); i++){
-          sf::Rect<int> obja(obs[i].shape.getPosition().x+5, obs[i].shape.getPosition().y+5, obs[i].shape.getSize().x-5, obs[i].shape.getSize().y-5);
+          sf::Rect<int> obja(obs[i].shape.getPosition().x+15, obs[i].shape.getPosition().y+15, obs[i].shape.getSize().x-15, obs[i].shape.getSize().y-15);
             if(obja.intersects(play))
                 return true;
         }

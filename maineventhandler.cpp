@@ -23,6 +23,7 @@ int handlemenuevents(sf::RenderWindow &window, selector &selector){
     std::string temp;
     for(int i = 0; i < clicked.size(); i++){
         temp = selector.getname(clicked[i]);
+        selector.unclick(clicked[i]);
         if(temp == "EXIT")
             window.close();
         if(temp == "START")

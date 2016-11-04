@@ -52,7 +52,6 @@ void initplayertxt(player &player, sf::Vector2u size){
         player.shape.setTexture(player.texture[0]);
         player.activetxt = 0;
     }
-    player.shape.setScale(size.x*0.11/player.shape.getLocalBounds().width, size.y*0.11/player.shape.getGlobalBounds().height);
 }
 
 void managemovement(player &player, sf::Vector2u size){

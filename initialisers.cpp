@@ -1,6 +1,7 @@
 #include "initialisers.hpp"
 #include "GAMESCENE/dottedlines.hpp"
 #include "GAMESCENE/player.hpp"
+#include "GAMESCENE/OBJECTS/obstacles.hpp"
 #include "UI/selector.hpp"
 #include <SFML/Graphics.hpp>
 #include <string>
@@ -9,7 +10,6 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
-extern player player;
 
 int prerunoptions(short &resx, short &resy){
     sf::RenderWindow *setup = new sf::RenderWindow(sf::VideoMode(650, 600), "Ultra Typrovith Runaway Setup");
@@ -133,4 +133,36 @@ void drawgameelements(sf::RenderWindow &window, lines lines, sf::Sprite shape){
 
 void movegameelements(lines &lines){
     lines.move();
+}
+
+void resetvars(player &player, obstacles &obstacles, sf::RenderWindow &window){
+    obstacles.firstinit = true;
+    obstacles.clock.restart();
+    player.isinair = false;
+    player.ismoving = false;
+    player.isjumping = false;
+    player.passed.restart();
+    player.vertpassed.restart();
+    player.animationp.restart();
+    player.jumpc.restart();
+    player.actualmove = 0;
+    player.speed = 0.7;
+    player.ismovingvert = false,
+    player.activetxt = -1;
+    player.posx = 2;
+    player.posy = window.getSize().y/2-player.shape.getLocalBounds().height/2;
+    player.shape.setPosition(window.getSize().x/2-player.shape.getLocalBounds().width/2, player.posy);
+    initplayertxt(player, window.getSize());
+    resetmovement(player, true);
+    player.shape.setScale(window.getSize().x*0.11/player.shape.getLocalBounds().width, window.getSize().y*0.11/player.shape.getGlobalBounds().height);
+}
+
+void resetimages(sf::RectangleShape &defs, sf::RectangleShape &defs2, lines &line, sf::RenderWindow &mainwindow){
+    initdrawableelements(line, mainwindow);
+    defs.setSize(sf::Vector2f(mainwindow.getSize().x*0.2 ,mainwindow.getSize().y));
+    defs2.setSize(sf::Vector2f(mainwindow.getSize().x*0.2 ,mainwindow.getSize().y));
+    defs.setOrigin(mainwindow.getSize().x*0.2 ,mainwindow.getSize().y);
+    defs.rotate(180);
+    defs.setPosition(0,0);
+    defs2.setPosition(mainwindow.getSize().x-defs2.getSize().x, 0);
 }
